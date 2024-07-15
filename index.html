@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Grocery List Generator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Smart Grocery List Generator</h1>
+    <div id="recipe-list">
+        <h2>Recipes</h2>
+        <ul></ul>
+    </div>
+    <div id="grocery-list">
+        <h2>Grocery List</h2>
+        <ul></ul>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Fetch recipes
+            $.get('/recipes', function(data) {
+                data.forEach(recipe => {
+                    $('#recipe-list ul').append(`<li>${recipe.name}</li>`);
+                });
+            });
+
+            // Fetch grocery list for user with id 1
+            $.get('/grocerylist/1', function(data) {
+                if (data.items) {
+                    const items = data.items.split(',');
+                    items.forEach(item => {
+                        $('#grocery-list ul').append(`<li>${item}</li>`);
+                    });
+                } else {
+                    $('#grocery-list ul').append('<li>No items found</li>');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
